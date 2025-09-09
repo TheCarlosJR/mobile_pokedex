@@ -1,0 +1,20 @@
+lib/
+├── core/                   # Funcionalidades essenciais do app
+│   ├── constants/          # Constantes do projeto
+│   ├── utils/              # Utilitários e helpers
+│   ├── routes/             # Gerenciamento de rotas
+│   ├── theme/              # Configurações de tema
+│   └── widgets/            # Widgets reutilizáveis
+├── data/                   # Camada de dados
+│   ├── models/             # Modelos de dados
+│   ├── repositories/       # Repositórios (abstração dos data sources)
+│   ├── local/              # Fontes de dados locais (SQLite, SharedPreferences)
+│   └── remote/             # Fontes de dados remotas (API)
+├── domain/                 # Lógica de negócio
+│   ├── entities/           # Entidades do domínio
+│   ├── repositories/       # Interfaces dos repositórios
+│   └── usecases/           # Casos de uso
+└── presentation/           # Camada de apresentação (MVVM)
+    ├── pages/              # Telas (Pages/Screens)
+    ├── viewmodels/         # ViewModels
+    └── widgets/            # Widgets específicos da UI
