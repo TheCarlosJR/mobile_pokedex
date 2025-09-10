@@ -3,8 +3,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:pokedex/data/repositories/poke_list_repo.dart';
-import 'package:pokedex/presentation/viewmodels/poke_list_provider.dart';
+import 'package:pokedex/data/repositories/poke_data_repo.dart';
+import 'package:pokedex/presentation/viewmodels/poke_data_provider.dart';
 import 'package:pokedex/presentation/widgets/mini_card.dart';
 import 'package:pokedex/presentation/widgets/mini_load_card.dart';
 import 'package:pokedex/presentation/pages/details.dart';
@@ -55,7 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     Future.microtask(() async {
       //pega o local correto pois cada SO tem o seu
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = await getApplicationSupportDirectory();
 
       //inivializa hive
       Hive

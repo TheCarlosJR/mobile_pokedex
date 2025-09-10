@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:pokedex/core/constants/api.dart';
-import 'package:pokedex/data/models/poke_list_model.dart';
+import 'package:pokedex/data/models/poke_data_model.dart';
 
 /// Repositorio - Pokemon (resumo)
-class PokeRepo {
-  /// Obtem lista de pokemons com paginacao
-  Future<List<PokeListModel>> getPokemons({int offset = 0, int limit = 10}) async {
+class PokeDataRepo {
+  /// Obtem dados basicos de pokemons (com paginacao)
+  Future<List<PokeDataModel>> getPokemons({int offset = 0, int limit = 10}) async {
+
+    //TODO ao inves disso use o cache
+
     final response = await http.get(
       Uri.parse(
           '${ApiConsts.baseUrl}${ApiConsts.pokeEndpoint}?offset=$offset&limit=$limit'),
@@ -33,7 +36,7 @@ class PokeRepo {
 
           //resposta ok
           if (pokeRes.statusCode == 200) {
-            return PokeListModel.fromJson(jsonDecode(pokeRes.body));
+            return PokeDataModel.fromJson(jsonDecode(pokeRes.body));
           } else {
             throw Exception(
                 'Erro ${pokeRes.statusCode} ao carregar Pokémon na URL: $pokeUrl');
@@ -48,7 +51,7 @@ class PokeRepo {
   }
 
   /// Obtem dados de um pokemon pelo nome ou id
-  Future<PokeListModel> getPokemon(String key) async {
+  Future<PokeDataModel> getPokemon(String key) async {
     final response = await http.get(
       Uri.parse(ApiConsts.pokeDataUrl(key)),
       headers: ApiConsts.thisHeader,
@@ -56,7 +59,7 @@ class PokeRepo {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      return PokeListModel.fromJson(json);
+      return PokeDataModel.fromJson(json);
     } else {
       throw Exception('Erro ao carregar Pokémon: $key');
     }

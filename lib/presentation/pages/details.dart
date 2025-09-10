@@ -9,7 +9,7 @@ import 'package:pokedex/core/utils/utils.dart';
 import 'package:pokedex/core/constants/text_styles.dart';
 import 'package:pokedex/core/constants/poke_types.dart';
 
-import 'package:pokedex/data/models/poke_list_model.dart';
+import 'package:pokedex/data/models/poke_data_model.dart';
 
 import 'package:pokedex/presentation/viewmodels/poke_specie_provider.dart';
 import 'package:pokedex/presentation/viewmodels/poke_evochain_provider.dart';
@@ -28,7 +28,7 @@ class DetailsPage extends ConsumerStatefulWidget {
     required this.pokemon,
   });
 
-  final PokeListModel pokemon;
+  final PokeDataModel pokemon;
 
   @override
   ConsumerState<DetailsPage> createState() => _DetailsPageState();

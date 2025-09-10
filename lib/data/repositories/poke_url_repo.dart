@@ -5,7 +5,8 @@ import 'package:pokedex/core/constants/api.dart';
 import 'package:pokedex/data/models/poke_url_model.dart';
 
 /// Repositorio - Pokemon item de lista
-class PokeListRepo {
+class PokeUrlRepo {
+
   /// Obtem lista de pokemons com paginacao - obtem todos disponiveis
   Future<List<PokeUrlModel>> getPokemons({int offset = 0, int limit = 3000}) async {
     final response = await http.get(

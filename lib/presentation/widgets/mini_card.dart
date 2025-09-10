@@ -7,12 +7,12 @@ import 'package:pokedex/core/constants/text_styles.dart';
 import 'package:pokedex/core/constants/poke_enums.dart';
 import 'package:pokedex/core/constants/poke_types.dart';
 
-import 'package:pokedex/data/models/poke_list_model.dart';
+import 'package:pokedex/data/models/poke_data_model.dart';
 
 import 'package:pokedex/presentation/widgets/micro_type.dart';
 
 class MiniCard extends StatelessWidget {
-  final PokeListModel pokemon;
+  final PokeDataModel pokemon;
   final Function()? onTap;
 
   const MiniCard({

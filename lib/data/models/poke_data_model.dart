@@ -5,7 +5,7 @@ import 'package:pokedex/core/constants/poke_types.dart';
 import 'package:pokedex/core/constants/poke_stats.dart';
 
 /// Modelo - Pokemon (resumo)
-class PokeListModel {
+class PokeDataModel {
   final int id;
   final String name;
   //final List<String> typeKeys;
@@ -18,7 +18,7 @@ class PokeListModel {
   final String specieUrl;
   final bool fav;
 
-  PokeListModel({
+  PokeDataModel({
     required this.id,
     required this.name,
     //required this.typeKeys,
@@ -32,7 +32,7 @@ class PokeListModel {
     this.fav = false,
   });
 
-  factory PokeListModel.fromJson(Map<String, dynamic> json) {
+  factory PokeDataModel.fromJson(Map<String, dynamic> json) {
     try {
       //obtem o basico
       final int id = json['id'];
@@ -122,7 +122,7 @@ class PokeListModel {
       });
 
       //cria objeto
-      return PokeListModel(
+      return PokeDataModel(
         id: id,
         name: name,
         //typeKeys: getTypeKeys,
