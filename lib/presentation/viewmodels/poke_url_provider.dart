@@ -4,26 +4,26 @@ import 'package:pokedex/data/models/poke_url_model.dart';
 import 'package:pokedex/data/repositories/poke_url_repo.dart';
 
 /// Estado da lista de Pokemons com dados
-class PokeListUrlState {
+class PokeUrlListState {
   final List<PokeUrlModel> pokemons;
   final bool isLoading;
   final bool hasError;
   String? errorMsg;
 
-  PokeListUrlState({
+  PokeUrlListState({
     required this.pokemons,
     this.isLoading = false,
     this.hasError = false,
     this.errorMsg,
   });
 
-  PokeListUrlState copyWith({
+  PokeUrlListState copyWith({
     List<PokeUrlModel>? pokemons,
     bool? isLoading,
     bool? hasError,
     String? errorMsg,
   }) {
-    return PokeListUrlState(
+    return PokeUrlListState(
       pokemons: pokemons ?? this.pokemons,
       isLoading: isLoading ?? this.isLoading,
       hasError: hasError ?? this.hasError,
@@ -36,13 +36,14 @@ class PokeListUrlState {
 final pokeRepoProvider = Provider((ref) => PokeUrlRepo());
 
 /// ViewModel (StateNotifier eh uma classe controladora que gerencia o estado de forma reativa)
-class PokeListUrlNotifier extends StateNotifier<PokeListUrlState> {
+class PokeUrlListNotifier extends StateNotifier<PokeUrlListState> {
   final PokeUrlRepo repository;
 
-  PokeListUrlNotifier(this.repository)
-      : super(PokeListUrlState(pokemons: []));
+  PokeUrlListNotifier(this.repository)
+      : super(PokeUrlListState(pokemons: []));
 
-  Future<void> loadPokemons() async {
+  /// Obtem a lista de URLs de pokemons
+  Future<void> getPokemons() async {
     if (state.isLoading) return;
 
     state = state.copyWith(isLoading: true, hasError: false);
@@ -62,8 +63,8 @@ class PokeListUrlNotifier extends StateNotifier<PokeListUrlState> {
 }
 
 /// Provider do estado da lista (StateNotifierProvider conecta o StateNotifier ao Riverpod)
-final pokeListUrlNotifierProvider =
-StateNotifierProvider<PokeListUrlNotifier, PokeListUrlState>((ref) {
+final pokeUrlListNotifierProvider =
+StateNotifierProvider<PokeUrlListNotifier, PokeUrlListState>((ref) {
   final repo = ref.watch(pokeRepoProvider);
-  return PokeListUrlNotifier(repo);
+  return PokeUrlListNotifier(repo);
 });

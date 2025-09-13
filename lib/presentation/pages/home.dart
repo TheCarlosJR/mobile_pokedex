@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:pokedex/data/repositories/poke_url_repo.dart';
 import 'package:pokedex/data/repositories/poke_data_repo.dart';
+import 'package:pokedex/presentation/viewmodels/poke_url_provider.dart';
 import 'package:pokedex/presentation/viewmodels/poke_data_provider.dart';
 import 'package:pokedex/presentation/widgets/mini_card.dart';
 import 'package:pokedex/presentation/widgets/mini_load_card.dart';
@@ -17,24 +17,9 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-/*
-Fluxo de trabalho
-
-Se NAO existe cache salvo no disco ?
-
--Obtem todos os pokemons com:
-ApiConsts.pokemonListUrl(3000,0);
--Salva resultado em cache como chave o nome e valor a url
-
--Obtem Map do cache
--Na tela principal continua pedindo dados conforme navega pela url
-
--A barra de pesquisa faz coringa com as chaves do cache
- */
-
-
-
 class _HomePageState extends ConsumerState<HomePage> {
+  late final urlList;
+
   final ScrollController _scrollController = ScrollController();
 
   /// Provider que armazena a query busca do TextField
@@ -53,32 +38,21 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
 
-    Future.microtask(() async {
-      //pega o local correto pois cada SO tem o seu
-      final dir = await getApplicationSupportDirectory();
-
-      //inivializa hive
-      Hive
-        ..init(dir.path);
-        //..registerAdapters();
-
-      //se NAO existe caixa
-      if (!(await Hive.boxExists('pokemonList'))) {
-        ref.read(pokeListNotifierProvider.notifier).loadPokemons();
-      }
-
-      final box = await Hive.openBox('pokemonList');
-    });
-
-    //obtem os primeiros pokemons
     Future.microtask(
-        () => ref.read(pokeListNotifierProvider.notifier).loadPokemons());
+        () async {
+          //obtem a lista completa de pokemons (nome e url)
+          await ref.read(pokeUrlListNotifierProvider.notifier).getPokemons();
+          urlList = ref.watch(pokeUrlListNotifierProvider).pokemons;
+
+          //obtem os primeiros dados basicos de pokemons (nome, tipo, etc)
+          await ref.read(pokeDataListNotifierProvider.notifier).getPokemons(urlList);
+        });
 
     // Faz com que carregue mais pokemons da API se chegar no fim do scroll
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
-        ref.read(pokeListNotifierProvider.notifier).loadPokemons();
+        ref.read(pokeDataListNotifierProvider.notifier).getPokemons(urlList);
       }
     });
   }
@@ -86,7 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     //estado da lista de pokemons
-    final state = ref.watch(pokeListNotifierProvider);
+    final state = ref.watch(pokeDataListNotifierProvider);
 
     //se estado tem algum erro
     if (state.hasError) {
@@ -106,7 +80,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ? state.pokemons
         : state.pokemons.where((entry) =>
           ((entry.name.toLowerCase().contains(searchQuery)) || (entry.id.toString().toLowerCase().contains(searchQuery)))
-        ).toList();
+        ).toList(); //TODO mudar isso
 
     //procura tambem na API
     if (searchQuery.isNotEmpty) {

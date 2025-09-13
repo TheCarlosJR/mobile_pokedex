@@ -42,7 +42,7 @@ class PokeEvoChainNotifier extends StateNotifier<PokeEvoChainState> {
   PokeEvoChainNotifier(this.repository)
       : super(PokeEvoChainState(evoChain: null));
 
-  Future<void> loadEvoChain({required String url}) async {
+  Future<void> getEvoChain({required String url}) async {
     if (state.isLoading) return;
 
     state = state.copyWith(isLoading: true, hasError: false);

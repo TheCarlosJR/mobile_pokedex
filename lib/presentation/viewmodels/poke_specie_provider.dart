@@ -44,13 +44,13 @@ class PokeSpecieNotifier extends StateNotifier<PokeSpecieState> {
   PokeSpecieNotifier(this.refEvoChain, this.repository)
       : super(PokeSpecieState(specie: null));
 
-  Future<void> loadSpecie({required int id}) async {
+  Future<void> getSpecie({required String url}) async {
     if (state.isLoading) return;
 
     state = state.copyWith(isLoading: true, hasError: false);
 
     try {
-      final specie = await repository.getSpecie(id: id);
+      final specie = await repository.getSpecie(url: url);
 
       state = state.copyWith(
         specie: specie,
@@ -60,7 +60,7 @@ class PokeSpecieNotifier extends StateNotifier<PokeSpecieState> {
       //encadeamento - carrega a evolucao baseado na specie
       await refEvoChain
           .read(pokeEvoChainNotifierProvider.notifier)
-          .loadEvoChain(url: specie.evoChainUrl);
+          .getEvoChain(url: specie.evoChainUrl);
     } catch (e) {
       state = state.copyWith(isLoading: false, hasError: true, errorMsg: e.toString());
     }

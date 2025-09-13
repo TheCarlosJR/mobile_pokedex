@@ -65,10 +65,10 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void initState() {
     super.initState();
 
-    //obtem dados da especie
+    //obtem dados da especie - que vai obter dados da evolucao
     Future.microtask(() => ref
         .read(pokeSpecieNotifierProvider.notifier)
-        .loadSpecie(id: widget.pokemon.id));
+        .getSpecie(url: widget.pokemon.specieUrl));
   }
 
   @override

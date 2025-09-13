@@ -6,15 +6,17 @@ import 'package:pokedex/core/constants/poke_generations.dart';
 
 /// Modelo - Especie Pokemon (detalhes)
 class PokeSpecieModel {
+  final String url;
   final Map<String, String> details;
   final String evoChainUrl;
 
   PokeSpecieModel({
+    required this.url,
     required this.details,
     required this.evoChainUrl,
   });
 
-  factory PokeSpecieModel.fromJson(Map<String, dynamic> json) {
+  factory PokeSpecieModel.fromJson(String url, Map<String, dynamic> json) {
     try {
       final getDetails = Map.fromEntries({
         MapEntry(
@@ -42,6 +44,7 @@ class PokeSpecieModel {
       final getEvoUrl = json['evolution_chain']['url'];
 
       return PokeSpecieModel(
+        url: url,
         details: getDetails,
         evoChainUrl: getEvoUrl,
       );
